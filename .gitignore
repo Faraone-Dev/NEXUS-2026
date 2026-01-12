@@ -1,0 +1,44 @@
+# Environment files
+.env
+.env.local
+.env.production
+*.env
+
+# Dependencies
+node_modules/
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Build outputs
+dist/
+build/
+artifacts/
+cache/
+typechain-types/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Keys and secrets
+*.key
+*.pem
+*.secret
+bot/.env
+contracts/.env
+*.env
+node_modules/
+bot/.env
+.env

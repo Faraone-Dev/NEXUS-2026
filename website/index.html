@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS AI — The Future Runs on Intelligence</title>
+    <meta name="description" content="NEXUS AI is the autonomous financial intelligence layer for Web3. AI-powered trading, self-optimizing liquidity, and community-owned infrastructure.">
+    <meta name="theme-color" content="#0a0a0a">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+    
+    <canvas id="particles"></canvas>
+    
+    <nav class="nav">
+        <a href="#" class="logo">
+            <span class="logo-icon">◈</span>
+            <span>NEXUS</span>
+        </a>
+        <div class="nav-links">
+            <a href="#about">About</a>
+            <a href="#features">Features</a>
+            <a href="#token">Token</a>
+            <a href="#roadmap">Roadmap</a>
+        </div>
+        <button class="btn-glow" id="launch-app">
+            <span>Launch App</span>
+            <div class="btn-particles"></div>
+        </button>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-bg">
+            <div class="gradient-orb orb-1"></div>
+            <div class="gradient-orb orb-2"></div>
+            <div class="gradient-orb orb-3"></div>
+            <div class="grid-overlay"></div>
+        </div>
+        
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span class="pulse-dot"></span>
+                <span>LIVE ON MAINNET Q1 2026</span>
+            </div>
+            
+            <h1 class="hero-title">
+                <span class="line">
+                    <span class="word" data-text="THE">THE</span>
+                    <span class="word" data-text="FUTURE">FUTURE</span>
+                </span>
+                <span class="line">
+                    <span class="word" data-text="RUNS">RUNS</span>
+                    <span class="word" data-text="ON">ON</span>
+                </span>
+                <span class="line accent">
+                    <span class="word glitch" data-text="INTELLIGENCE">INTELLIGENCE</span>
+                </span>
+            </h1>
+            
+            <p class="hero-sub">
+                Autonomous AI agents managing billions in liquidity.<br>
+                Self-learning. Self-optimizing. Community-owned.
+            </p>
+            
+            <div class="hero-cta">
+                <a href="#presale" class="btn-primary">
+                    <span class="btn-text">Get Early Access</span>
+                    <span class="btn-icon">→</span>
+                    <div class="btn-shine"></div>
+                </a>
+                <a href="#demo" class="btn-outline">
+                    <span>Watch Demo</span>
+                    <span class="play-icon">▶</span>
+                </a>
+            </div>
+            
+            <div class="hero-stats">
+                <div class="stat">
+                    <span class="stat-value" data-target="847">0</span>
+                    <span class="stat-unit">M</span>
+                    <span class="stat-label">TVL Target</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat">
+                    <span class="stat-value" data-target="24">0</span>
+                    <span class="stat-unit">/7</span>
+                    <span class="stat-label">AI Uptime</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat">
+                    <span class="stat-value" data-target="156">0</span>
+                    <span class="stat-unit">%</span>
+                    <span class="stat-label">Avg APY</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="hero-visual">
+            <div class="ai-core">
+                <div class="core-ring ring-1"></div>
+                <div class="core-ring ring-2"></div>
+                <div class="core-ring ring-3"></div>
+                <div class="core-center">
+                    <span>◈</span>
+                </div>
+                <div class="core-particles">
+                    <span></span><span></span><span></span><span></span>
+                    <span></span><span></span><span></span><span></span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="scroll-indicator">
+            <span>SCROLL</span>
+            <div class="scroll-line"></div>
+        </div>
+    </section>
+
+    <section class="marquee-section">
+        <div class="marquee">
+            <div class="marquee-content">
+                <span>AUTONOMOUS TRADING</span>
+                <span class="dot">◈</span>
+                <span>AI-POWERED LIQUIDITY</span>
+                <span class="dot">◈</span>
+                <span>ZERO HUMAN ERROR</span>
+                <span class="dot">◈</span>
+                <span>24/7 OPTIMIZATION</span>
+                <span class="dot">◈</span>
+                <span>COMMUNITY GOVERNED</span>
+                <span class="dot">◈</span>
+                <span>AUTONOMOUS TRADING</span>
+                <span class="dot">◈</span>
+                <span>AI-POWERED LIQUIDITY</span>
+                <span class="dot">◈</span>
+                <span>ZERO HUMAN ERROR</span>
+                <span class="dot">◈</span>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="about">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">// ABOUT</span>
+                <h2 class="section-title">
+                    Not another token.<br>
+                    <span class="highlight">A financial revolution.</span>
+                </h2>
+            </div>
+            
+            <div class="about-grid">
+                <div class="about-text">
+                    <p class="big-text">
+                        NEXUS deploys autonomous AI agents that trade, hedge, and optimize liquidity across DeFi — 
+                        <span class="accent">without human intervention.</span>
+                    </p>
+                    <p>
+                        Our neural network processes 50,000+ data points per second. It learns from every trade, 
+                        every market shift, every opportunity. While you sleep, NEXUS works.
+                    </p>
+                    <div class="about-features">
+                        <div class="feature-pill">
+                            <span class="check">✓</span>
+                            <span>Reinforcement Learning</span>
+                        </div>
+                        <div class="feature-pill">
+                            <span class="check">✓</span>
+                            <span>Multi-chain Execution</span>
+                        </div>
+                        <div class="feature-pill">
+                            <span class="check">✓</span>
+                            <span>MEV Protection</span>
+                        </div>
+                        <div class="feature-pill">
+                            <span class="check">✓</span>
+                            <span>Zero-knowledge Proofs</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-visual">
+                    <div class="code-window">
+                        <div class="code-header">
+                            <span class="dot red"></span>
+                            <span class="dot yellow"></span>
+                            <span class="dot green"></span>
+                            <span class="filename">nexus_agent.py</span>
+                        </div>
+                        <pre class="code-content"><code><span class="keyword">class</span> <span class="class">NexusAgent</span>:
+    <span class="keyword">def</span> <span class="function">__init__</span>(self):
+        self.brain = <span class="class">NeuralNetwork</span>()
+        self.memory = <span class="class">ReplayBuffer</span>()
+        
+    <span class="keyword">async def</span> <span class="function">optimize</span>(self):
+        <span class="keyword">while</span> <span class="boolean">True</span>:
+            state = <span class="keyword">await</span> self.scan_markets()
+            action = self.brain.predict(state)
+            reward = <span class="keyword">await</span> self.execute(action)
+            self.learn(reward)
+            
+<span class="comment"># 24/7 autonomous operation</span>
+agent = <span class="class">NexusAgent</span>()
+agent.optimize()  <span class="comment"># Never stops</span></code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-header center">
+                <span class="section-tag">// CAPABILITIES</span>
+                <h2 class="section-title">
+                    Built different.<br>
+                    <span class="highlight">Performs different.</span>
+                </h2>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card large">
+                    <div class="feature-icon">
+                        <div class="icon-glow"></div>
+                        <span>⚡</span>
+                    </div>
+                    <h3>Sentient Engine</h3>
+                    <p>Deep reinforcement learning model trained on 5 years of market data. Predicts trends before they happen.</p>
+                    <div class="feature-stat">
+                        <span class="stat-big">94.7%</span>
+                        <span class="stat-desc">Prediction Accuracy</span>
+                    </div>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon purple">
+                        <span>🔮</span>
+                    </div>
+                    <h3>Quantum Vaults</h3>
+                    <p>Auto-compounding strategies that maximize yield while minimizing risk exposure.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon blue">
+                        <span>🌐</span>
+                    </div>
+                    <h3>Cross-chain Bridge</h3>
+                    <p>Seamless asset movement across ETH, BSC, Polygon, Arbitrum, and Base.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon green">
+                        <span>🛡️</span>
+                    </div>
+                    <h3>MEV Shield</h3>
+                    <p>Proprietary routing protects every transaction from sandwich attacks.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon orange">
+                        <span>📊</span>
+                    </div>
+                    <h3>Live Analytics</h3>
+                    <p>Real-time dashboard showing AI decisions, P&L, and market signals.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="token" class="token">
+        <div class="container">
+            <div class="token-grid">
+                <div class="token-info">
+                    <span class="section-tag">// TOKENOMICS</span>
+                    <h2 class="section-title">
+                        $NEXAI<br>
+                        <span class="highlight">Powers everything.</span>
+                    </h2>
+                    <p>
+                        Stake to earn. Vote to govern. Hold to benefit from protocol revenue sharing.
+                        Every transaction feeds the AI. Every improvement benefits holders.
+                    </p>
+                    
+                    <div class="token-stats">
+                        <div class="token-stat">
+                            <span class="label">Total Supply</span>
+                            <span class="value">1,000,000,000</span>
+                        </div>
+                        <div class="token-stat">
+                            <span class="label">Initial Price</span>
+                            <span class="value">$0.042</span>
+                        </div>
+                        <div class="token-stat">
+                            <span class="label">Staking APY</span>
+                            <span class="value">Up to 180%</span>
+                        </div>
+                    </div>
+                    
+                    <a href="#presale" class="btn-primary">
+                        <span class="btn-text">Join Presale</span>
+                        <span class="btn-icon">→</span>
+                        <div class="btn-shine"></div>
+                    </a>
+                </div>
+                
+                <div class="token-chart">
+                    <div class="chart-visual">
+                        <div class="chart-ring">
+                            <svg viewBox="0 0 200 200">
+                                <circle class="ring-bg" cx="100" cy="100" r="80"/>
+                                <circle class="ring-segment seg-1" cx="100" cy="100" r="80" stroke-dasharray="150 503" stroke-dashoffset="0"/>
+                                <circle class="ring-segment seg-2" cx="100" cy="100" r="80" stroke-dasharray="100 503" stroke-dashoffset="-150"/>
+                                <circle class="ring-segment seg-3" cx="100" cy="100" r="80" stroke-dasharray="100 503" stroke-dashoffset="-250"/>
+                                <circle class="ring-segment seg-4" cx="100" cy="100" r="80" stroke-dasharray="75 503" stroke-dashoffset="-350"/>
+                                <circle class="ring-segment seg-5" cx="100" cy="100" r="80" stroke-dasharray="78 503" stroke-dashoffset="-425"/>
+                            </svg>
+                            <div class="chart-center">
+                                <span class="chart-total">1B</span>
+                                <span class="chart-label">$NEXAI</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chart-legend">
+                        <div class="legend-item"><span class="color c1"></span>Community & Staking<span class="percent">30%</span></div>
+                        <div class="legend-item"><span class="color c2"></span>Liquidity Pool<span class="percent">20%</span></div>
+                        <div class="legend-item"><span class="color c3"></span>Development<span class="percent">20%</span></div>
+                        <div class="legend-item"><span class="color c4"></span>Marketing<span class="percent">15%</span></div>
+                        <div class="legend-item"><span class="color c5"></span>Team (4yr vest)<span class="percent">15%</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="roadmap" class="roadmap">
+        <div class="container">
+            <div class="section-header center">
+                <span class="section-tag">// ROADMAP</span>
+                <h2 class="section-title">
+                    The path to<br>
+                    <span class="highlight">autonomous finance.</span>
+                </h2>
+            </div>
+            
+            <div class="roadmap-timeline">
+                <div class="timeline-line"></div>
+                
+                <div class="timeline-item active">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="timeline-phase">PHASE 01</span>
+                        <h3>Foundation</h3>
+                        <span class="timeline-date">Q4 2025</span>
+                        <ul>
+                            <li>Core AI architecture complete</li>
+                            <li>Smart contract audits (Trail of Bits)</li>
+                            <li>Private alpha with 500 testers</li>
+                            <li>Strategic partnerships locked</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="timeline-phase">PHASE 02</span>
+                        <h3>Launch</h3>
+                        <span class="timeline-date">Q1 2026</span>
+                        <ul>
+                            <li>Public presale event</li>
+                            <li>DEX listings (Uniswap, PancakeSwap)</li>
+                            <li>Staking platform live</li>
+                            <li>AI Agent V1 deployment</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="timeline-phase">PHASE 03</span>
+                        <h3>Expansion</h3>
+                        <span class="timeline-date">Q2-Q3 2026</span>
+                        <ul>
+                            <li>CEX listings campaign</li>
+                            <li>Cross-chain bridge activation</li>
+                            <li>DAO governance launch</li>
+                            <li>AI Agent V2 with advanced strategies</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="timeline-phase">PHASE 04</span>
+                        <h3>Dominance</h3>
+                        <span class="timeline-date">Q4 2026+</span>
+                        <ul>
+                            <li>Institutional API access</li>
+                            <li>$1B TVL milestone</li>
+                            <li>Mobile app launch</li>
+                            <li>Full autonomous operation</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="presale" class="presale">
+        <div class="container">
+            <div class="presale-wrapper">
+                <div class="presale-info">
+                    <span class="section-tag">// EARLY ACCESS</span>
+                    <h2 class="section-title">
+                        Be first.<br>
+                        <span class="highlight">Win first.</span>
+                    </h2>
+                    <p>
+                        Presale participants get 40% bonus tokens, priority staking access, 
+                        and exclusive entry to the Nexus Council governance body.
+                    </p>
+                    
+                    <div class="presale-perks">
+                        <div class="perk">
+                            <span class="perk-icon">🎁</span>
+                            <div>
+                                <strong>40% Bonus</strong>
+                                <span>Extra tokens for early believers</span>
+                            </div>
+                        </div>
+                        <div class="perk">
+                            <span class="perk-icon">⚡</span>
+                            <div>
+                                <strong>Priority Access</strong>
+                                <span>First to stake, first to earn</span>
+                            </div>
+                        </div>
+                        <div class="perk">
+                            <span class="perk-icon">👑</span>
+                            <div>
+                                <strong>Governance Rights</strong>
+                                <span>Shape the protocol's future</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="presale-card">
+                    <div class="card-header">
+                        <h3>Reserve Your Allocation</h3>
+                        <div class="live-badge">
+                            <span class="pulse-dot"></span>
+                            <span>REGISTRATIONS OPEN</span>
+                        </div>
+                    </div>
+                    
+                    <form class="presale-form" id="presale-form">
+                        <div class="form-group">
+                            <label>Email Address</label>
+                            <input type="email" placeholder="you@example.com" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Wallet Address (optional)</label>
+                            <input type="text" placeholder="0x...">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Contribution Amount</label>
+                            <div class="amount-selector">
+                                <button type="button" class="amount-btn" data-amount="500">$500</button>
+                                <button type="button" class="amount-btn active" data-amount="1000">$1,000</button>
+                                <button type="button" class="amount-btn" data-amount="5000">$5,000</button>
+                                <button type="button" class="amount-btn" data-amount="10000">$10K+</button>
+                            </div>
+                        </div>
+                        
+                        <div class="form-estimate">
+                            <span>Estimated Allocation</span>
+                            <span class="estimate-value">~23,809 $NEXAI + 40% bonus</span>
+                        </div>
+                        
+                        <button type="submit" class="btn-primary full">
+                            <span class="btn-text">Secure My Spot</span>
+                            <span class="btn-icon">→</span>
+                            <div class="btn-shine"></div>
+                        </button>
+                        
+                        <p class="form-disclaimer">
+                            No payment required now. We'll notify you when the presale opens.
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-box">
+                <div class="cta-content">
+                    <h2>The future doesn't wait.</h2>
+                    <p>Join 12,000+ early believers building the next era of finance.</p>
+                </div>
+                <div class="cta-socials">
+                    <a href="#" class="social-btn" aria-label="Twitter">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                    </a>
+                    <a href="#" class="social-btn" aria-label="Telegram">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+                    </a>
+                    <a href="#" class="social-btn" aria-label="Discord">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>
+                    </a>
+                    <a href="#" class="social-btn" aria-label="GitHub">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="#" class="logo">
+                        <span class="logo-icon">◈</span>
+                        <span>NEXUS</span>
+                    </a>
+                    <p>Autonomous intelligence for the decentralized economy.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Protocol</h4>
+                    <a href="#">Documentation</a>
+                    <a href="#">Whitepaper</a>
+                    <a href="#">Audit Reports</a>
+                    <a href="#">GitHub</a>
+                </div>
+                <div class="footer-links">
+                    <h4>Community</h4>
+                    <a href="#">Twitter</a>
+                    <a href="#">Telegram</a>
+                    <a href="#">Discord</a>
+                    <a href="#">Blog</a>
+                </div>
+                <div class="footer-links">
+                    <h4>Legal</h4>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Disclaimers</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2025 Nexus Protocol. All rights reserved.</p>
+                <p class="disclaimer">This is not financial advice. Cryptocurrency investments carry significant risk.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

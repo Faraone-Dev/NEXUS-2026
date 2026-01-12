@@ -1,0 +1,26 @@
+{
+  "name": "nexus-contracts",
+  "version": "1.0.0",
+  "description": "NEXUS AI Token Smart Contracts",
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "deploy:base": "hardhat run scripts/deploy.js --network base",
+    "deploy:bsc": "hardhat run scripts/deploy.js --network bsc",
+    "deploy:arbitrum": "hardhat run scripts/deploy.js --network arbitrum",
+    "deploy:polygon": "hardhat run scripts/deploy.js --network polygon",
+    "deploy:avalanche": "hardhat run scripts/deploy.js --network avalanche",
+    "deploy:all": "npm run deploy:base && npm run deploy:bsc && npm run deploy:arbitrum && npm run deploy:polygon && npm run deploy:avalanche",
+    "verify:base": "hardhat verify --network base",
+    "verify:bsc": "hardhat verify --network bsc",
+    "verify:arbitrum": "hardhat verify --network arbitrum",
+    "verify:polygon": "hardhat verify --network polygon",
+    "verify:avalanche": "hardhat verify --network avalanche"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
+    "@openzeppelin/contracts": "^5.0.0",
+    "dotenv": "^16.3.0",
+    "hardhat": "^2.19.0"
+  }
+}
