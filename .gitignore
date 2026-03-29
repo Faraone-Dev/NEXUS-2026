@@ -1,8 +1,8 @@
 # Environment files
 .env
-.env.local
-.env.production
-*.env
+.env.*
+bot/.env
+contracts/.env
 
 # Dependencies
 node_modules/
@@ -30,15 +30,16 @@ Thumbs.db
 
 # Logs
 *.log
-npm-debug.log*
+bot/logs/
 
 # Keys and secrets
 *.key
 *.pem
 *.secret
-bot/.env
-contracts/.env
-*.env
-node_modules/
-bot/.env
-.env
+
+# Runtime data (recreated by bot)
+bot/data_store/nexus.db
+bot/data_store/nexus.db-*
+bot/data_store/positions.json
+bot/data_store/learning_insights.json
+bot/training/trade_outcomes.json
