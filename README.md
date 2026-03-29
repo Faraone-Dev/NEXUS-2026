@@ -1,205 +1,410 @@
-# 🤖 NEXUS AI — Autonomous Trading Engine
-
-[![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
-[![Solidity](https://img.shields.io/badge/Solidity-0.8.20-363636?style=for-the-badge&logo=solidity)](https://soliditylang.org)
-[![DeepSeek](https://img.shields.io/badge/DeepSeek-AI_Engine-00B4D8?style=for-the-badge)](https://platform.deepseek.com)
-[![Binance](https://img.shields.io/badge/Binance-Futures-F0B90B?style=for-the-badge&logo=binance)](https://binance.com)
-[![License](https://img.shields.io/badge/License-Proprietary-red?style=for-the-badge)](LICENSE)
-
-> **AI-driven crypto trading system with LLM market analysis, multi-source data aggregation, and on-chain token-gated access tiers.**
-
----
-
-## Architecture
+# ◈ NEXUS AI — Solana Trading Intelligence
 
 ```
-┌─────────────────────────────────────────────────────────────────────┐
-│                        NEXUS ECOSYSTEM                              │
-├─────────────────────────────────────────────────────────────────────┤
-│                                                                     │
-│  ┌──────────────┐    ┌──────────────┐    ┌───────────────────────┐  │
-│  │   WEBSITE    │    │   $NEXUS     │    │   AI TRADING BOT      │  │
-│  │   Landing    │───▶│   ERC-20     │───▶│   DeepSeek Engine     │  │
-│  │   + Docs     │    │   Token      │    │   Binance Futures     │  │
-│  └──────────────┘    └──────────────┘    └───────────────────────┘  │
-│                            │                       │                │
-│                            ▼                       ▼                │
-│                    ┌──────────────┐    ┌───────────────────────┐    │
-│                    │   Staking    │    │   Multi-Source Data    │    │
-│                    │   Rewards    │    │   Price · OI · Funding │    │
-│                    │   + Tiers    │    │   Sentiment · News     │    │
-│                    └──────────────┘    └───────────────────────┘    │
-│                                                                     │
-└─────────────────────────────────────────────────────────────────────┘
+███╗   ██╗███████╗██╗  ██╗██╗   ██╗███████╗     █████╗ ██╗
+████╗  ██║██╔════╝╚██╗██╔╝██║   ██║██╔════╝    ██╔══██╗██║
+██╔██╗ ██║█████╗   ╚███╔╝ ██║   ██║███████╗    ███████║██║
+██║╚██╗██║██╔══╝   ██╔██╗ ██║   ██║╚════██║    ██╔══██║██║
+██║ ╚████║███████╗██╔╝ ╚██╗╚██████╔╝███████║    ██║  ██║██║
+╚═╝  ╚═══╝╚══════╝╚═╝   ╚═╝ ╚═════╝ ╚══════╝    ╚═╝  ╚═╝╚═╝
 ```
 
+> **AI-Powered Trading Bot for Solana Ecosystem**
+> 
+> Multi-agent AI system that scans, validates, and trades tokens on Solana DEXs — with real-time technical analysis, on-chain risk scoring, and self-improving learning loops.
+
 ---
 
-## Components
+## 🎯 What It Does
 
-### AI Trading Bot — `bot/`
+NEXUS is a fully autonomous Solana trading system. It's not a signal channel — it's an end-to-end pipeline that:
 
-The core engine. Runs autonomous analysis cycles using DeepSeek as the decision layer.
+1. **Scans** — Continuously discovers new tokens via DexScreener, Birdeye, PumpFun
+2. **Validates** — Multi-layer rug detection (contract, liquidity, holders, on-chain)
+3. **Analyzes** — 4 specialized DeepSeek AI agents + Aarna MCP technical analysis (44 indicators)
+4. **Executes** — Auto-trades via Jupiter with position sizing and SL/TP management
+5. **Learns** — Every trade outcome feeds back into reactive weight tuning
+6. **Alerts** — Real-time Telegram notifications with P&L tracking
 
-| Module | Purpose |
-|--------|---------|
-| `main.py` | Entry point — scheduler, lifecycle, signal handling |
-| `ai_engine.py` | DeepSeek integration — structured JSON decisions (LONG/SHORT/WAIT) |
-| `trader.py` | Execution logic — position sizing, SL/TP, max position limits |
-| `data_fetcher.py` | Multi-source aggregation — exchange, CoinGlass, CryptoPanic, Fear & Greed |
-| `exchange.py` | CCXT wrapper — Binance Futures (testnet + mainnet), order management |
-| `telegram_bot.py` | Real-time alerts — trade signals, P&L updates, error notifications |
-| `token_verifier.py` | On-chain tier verification — reads $NEXUS balance for access gating |
-| `config.py` | Environment-based configuration — all params via `.env` |
+---
 
-**Data Pipeline:**
+## 🏗️ Architecture
+
 ```
-Exchange (OHLCV, Ticker, Orderbook)
-    + CoinGlass (Funding Rate, Open Interest, Liquidations)
-    + CryptoPanic (News Sentiment)
-    + Alternative.me (Fear & Greed Index)
-    + Technical Indicators (RSI, MACD, Bollinger, ATR via `ta`)
-          │
-          ▼
-    DeepSeek Analysis → JSON { decision, confidence, SL/TP, risk_level }
-          │
-          ▼
-    Execution (confidence ≥ 70%) → Binance Futures Order
-          │
-          ▼
-    Telegram Alert → Position Monitoring → Auto SL/TP
-```
-
-**Risk Controls:**
-- Confidence threshold (skip if < 70%)
-- Max concurrent positions
-- Per-trade position sizing (% of balance)
-- Automatic stop-loss & take-profit
-- Dry run mode for paper trading
-- Sell cooldown enforcement
-
----
-
-### Smart Contracts — `contracts/`
-
-**NexusToken.sol** — ERC-20 with built-in economic mechanics:
-
-| Feature | Detail |
-|---------|--------|
-| Supply | 1,000,000,000 $NEXUS |
-| Buy Tax | 2% → Liquidity + Staking |
-| Sell Tax | 3% → Liquidity + Staking + Burn |
-| Max Wallet | 2% of supply (anti-whale) |
-| Max TX | 1% of supply |
-| Sell Cooldown | 1 hour between sells |
-| Anti-Bot | First 3 blocks blacklisted |
-| Burn | Deflationary on every sell |
-
-**NexusStaking.sol** — Stake-to-earn with tier integration:
-
-| Feature | Detail |
-|---------|--------|
-| Base APY | 10% |
-| Compound | Manual claim + restake |
-| Early Withdraw | 10% penalty if < 7 days |
-| Tier Boost | Higher stake → higher bot tier |
-| Security | ReentrancyGuard + SafeERC20 |
-
-Both contracts use OpenZeppelin 5.x (ERC20, Ownable, ReentrancyGuard, SafeERC20).
-
----
-
-### Token-Gated Access Tiers
-
-| Tier | $NEXUS Required | Bot Features |
-|------|-----------------|--------------|
-| Free | 0 | Telegram signals (15 min delay) |
-| Bronze | 10,000 | Real-time signals + 1 trading pair |
-| Silver | 50,000 | + 5 pairs + auto-trade testnet |
-| Gold | 200,000 | + Unlimited pairs + auto-trade live |
-| Diamond | 1,000,000 | + Private API + priority execution + VIP support |
-
-Verification is on-chain: `token_verifier.py` reads wallet balance via RPC and maps it to tier.
-
----
-
-## Tech Stack
-
-| Layer | Technology |
-|-------|------------|
-| AI Engine | DeepSeek Chat API (structured JSON output) |
-| Exchange | CCXT → Binance Futures (testnet / mainnet) |
-| Data | CoinGlass API, CryptoPanic, Alternative.me |
-| Indicators | `ta` library (RSI, MACD, Bollinger, ATR, OBV) |
-| Scheduling | APScheduler (configurable interval) |
-| Logging | Loguru (console + daily rotating file) |
-| Alerts | Telegram Bot API |
-| Contracts | Solidity 0.8.20 + OpenZeppelin 5.x |
-| Deployment | Hardhat (Base, BSC, Arbitrum, Polygon, Avalanche) |
-| Frontend | Vanilla HTML/CSS/JS |
-
----
-
-## Quick Start
-
-```bash
-# Clone
-git clone https://github.com/conditional-team/NEXUS-2026.git
-cd NEXUS-2026
-
-# Bot
-cd bot
-pip install -r requirements.txt
-cp .env.example .env        # Add DeepSeek + Binance keys
-python main.py               # Starts in dry-run mode
-
-# Contracts
-cd ../contracts
-npm install
-npx hardhat compile
-npx hardhat run scripts/deploy.js --network base
+┌──────────────────────────────────────────────────────────────────────────┐
+│                          NEXUS AI PIPELINE                                │
+├──────────────────────────────────────────────────────────────────────────┤
+│                                                                           │
+│   ╔════════════════════════════════════════════════════════════════════╗  │
+│   ║                     📊 DATA LAYER                                   ║  │
+│   ╠════════════════════════════════════════════════════════════════════╣  │
+│   ║  Jupiter API          → Swap routes, real-time prices               ║  │
+│   ║  Birdeye API          → Token analytics, holder data                ║  │
+│   ║  DexScreener API      → New pairs, volume, liquidity               ║  │
+│   ║  Helius RPC           → On-chain data, transactions                 ║  │
+│   ║  PumpFun API          → New launches, bonding curves                ║  │
+│   ║  Aarna MCP            → 44 TA indicators (RSI, MACD, BB, etc.)     ║  │
+│   ║  Whale Tracker        → Large wallet movements                      ║  │
+│   ╚════════════════════════════════════════════════════════════════════╝  │
+│                                     │                                     │
+│                                     ▼                                     │
+│   ╔════════════════════════════════════════════════════════════════════╗  │
+│   ║                     🛡️ VALIDATION LAYER                             ║  │
+│   ╠════════════════════════════════════════════════════════════════════╣  │
+│   ║  RugChecker           → Mint/freeze authority, LP lock, holders     ║  │
+│   ║  ContractAnalyzer     → Bytecode analysis, honeypot detection       ║  │
+│   ║  SecurityScanner      → Vulnerability scan, token security check    ║  │
+│   ╚════════════════════════════════════════════════════════════════════╝  │
+│                                     │                                     │
+│                                     ▼                                     │
+│   ╔════════════════════════════════════════════════════════════════════╗  │
+│   ║                     🧠 AI ANALYSIS LAYER                            ║  │
+│   ╠════════════════════════════════════════════════════════════════════╣  │
+│   ║  Agent #1: Token Analyzer       → Security score 0-100              ║  │
+│   ║  Agent #2: Sentiment Analyzer   → Hype + social momentum            ║  │
+│   ║  Agent #3: Risk Assessor        → Rug probability, red flags        ║  │
+│   ║  Agent #4: Master Decision      → BUY/SELL/WAIT + TA integration    ║  │
+│   ╚════════════════════════════════════════════════════════════════════╝  │
+│                                     │                                     │
+│                                     ▼                                     │
+│   ╔════════════════════════════════════════════════════════════════════╗  │
+│   ║                     📈 LEARNING LAYER                               ║  │
+│   ╠════════════════════════════════════════════════════════════════════╣  │
+│   ║  ReactiveAI           → Per-signal weight tuning from outcomes      ║  │
+│   ║  LearningEngine       → AI-driven trade post-mortems (24h cycle)    ║  │
+│   ║  SQLite Database      → Full trade history, scans, whale alerts     ║  │
+│   ╚════════════════════════════════════════════════════════════════════╝  │
+│                                     │                                     │
+│                                     ▼                                     │
+│   ╔════════════════════════════════════════════════════════════════════╗  │
+│   ║                     💰 EXECUTION LAYER                              ║  │
+│   ╠════════════════════════════════════════════════════════════════════╣  │
+│   ║  Jupiter Swap         → Best-route execution, slippage control      ║  │
+│   ║  Position Manager     → Multi-position tracking, auto SL/TP        ║  │
+│   ║  Simulator            → Paper trading with real mainnet prices      ║  │
+│   ╚════════════════════════════════════════════════════════════════════╝  │
+│                                     │                                     │
+│                                     ▼                                     │
+│   ╔════════════════════════════════════════════════════════════════════╗  │
+│   ║                     🔔 ALERTS                                       ║  │
+│   ╠════════════════════════════════════════════════════════════════════╣  │
+│   ║  Telegram Bot         → Trade signals, P&L reports, whale alerts    ║  │
+│   ╚════════════════════════════════════════════════════════════════════╝  │
+│                                                                           │
+└──────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## Project Structure
+## 📁 Project Structure
 
 ```
-NEXUS-2026/
-├── bot/                        # AI Trading Bot (Python)
-│   ├── main.py                 # Entry point + scheduler
-│   ├── ai_engine.py            # DeepSeek LLM integration
-│   ├── trader.py               # Trade execution + risk management
-│   ├── data_fetcher.py         # Multi-source data aggregation
-│   ├── exchange.py             # CCXT Binance Futures wrapper
-│   ├── telegram_bot.py         # Telegram alert system
-│   ├── token_verifier.py       # On-chain tier verification
-│   ├── config.py               # Environment configuration
-│   └── requirements.txt        # Python dependencies
+nexus-2026/
 │
-├── contracts/                  # Smart Contracts (Solidity)
-│   ├── NexusToken.sol          # ERC-20 — taxes, anti-whale, burn
-│   ├── NexusStaking.sol        # Staking — rewards, penalties, tiers
-│   ├── hardhat.config.js       # Multi-chain deployment config
-│   └── scripts/deploy.js       # Deployment script
+├── bot/                              # AI Trading Bot
+│   ├── main.py                       # Entry point — scan loop, trade pipeline
+│   ├── config.py                     # Centralized config from .env
+│   ├── run_backtest.py               # Backtesting runner
+│   │
+│   ├── ai/                           # AI Layer
+│   │   ├── engine.py                 # DeepSeek client (OpenAI-compatible)
+│   │   ├── agents.py                 # 4 specialized agents + decision model
+│   │   ├── learning.py               # Post-mortem analysis, parameter tuning
+│   │   └── reactive.py               # Reactive weight system (per-signal)
+│   │
+│   ├── data/                         # Data Layer
+│   │   ├── jupiter.py                # Jupiter V3 — prices, quotes, swaps
+│   │   ├── birdeye.py                # Birdeye — token analytics, holders
+│   │   ├── dexscreener.py            # DexScreener — new pairs, volume
+│   │   ├── helius.py                 # Helius — on-chain data, RPC
+│   │   ├── pumpfun.py                # PumpFun — new token launches
+│   │   ├── rugcheck.py               # RugCheck API integration
+│   │   ├── aarna_signals.py          # Aarna MCP — 44 TA indicators via Smithery
+│   │   ├── whale_tracker.py          # Whale wallet monitoring
+│   │   ├── scan_updater.py           # Background scan refresh
+│   │   └── database.py               # SQLite — trades, scans, whale alerts
+│   │
+│   ├── validation/                   # Validation Layer
+│   │   ├── rug_checker.py            # Multi-source rug detection
+│   │   └── contract_analyzer.py      # Smart contract security analysis
+│   │
+│   ├── execution/                    # Execution Layer
+│   │   ├── jupiter_swap.py           # Swap execution via Jupiter
+│   │   ├── position_manager.py       # Position tracking, SL/TP management
+│   │   └── simulator.py              # Paper trading engine
+│   │
+│   ├── core/                         # Infrastructure
+│   │   ├── rate_limiter.py           # Token bucket rate limiting
+│   │   ├── circuit_breaker.py        # Circuit breaker + health monitoring
+│   │   ├── resilient_client.py       # Retry-aware HTTP client
+│   │   └── load_testing.py           # Performance benchmarking
+│   │
+│   ├── security/                     # Security
+│   │   └── audit.py                  # Token security scanner, vuln detection
+│   │
+│   ├── telegram/                     # Telegram Integration
+│   │   ├── bot.py                    # Bot commands and handlers
+│   │   └── alerts.py                 # Trade alerts, P&L notifications
+│   │
+│   ├── backtesting/                  # Backtesting Engine
+│   │   └── engine.py                 # Historical simulation framework
+│   │
+│   ├── data_store/                   # Runtime data (gitignored)
+│   ├── training/                     # Training data directory
+│   ├── .env.example                  # Environment template
+│   └── requirements.txt              # Python dependencies
 │
-├── website/                    # Landing Page
+├── contracts/                        # Smart Contracts (EVM)
+│   ├── NexusToken.sol                # $NEXUS ERC-20 (tax, anti-whale, tiers)
+│   ├── NexusStaking.sol              # Staking (10% APY, compound, penalties)
+│   └── scripts/deploy.js             # Multi-chain deployment
+│
+├── website/                          # Landing Page
 │   ├── index.html
 │   ├── style.css
 │   └── script.js
 │
-├── NEXUS_MASTERPLAN.md         # Internal roadmap & tokenomics
-└── LICENSE                     # Proprietary
+├── .gitignore
+├── LICENSE                           # Proprietary — Conditional Team
+└── README.md
 ```
 
 ---
 
-## License
+## 🔧 Setup
 
-Proprietary — All Rights Reserved. See [LICENSE](LICENSE).
+### 1. Clone & Install
+
+```bash
+git clone https://github.com/conditional-team/nexus-2026.git
+cd nexus-2026/bot
+pip install -r requirements.txt
+```
+
+### 2. Configure Environment
+
+```bash
+cp .env.example .env
+```
+
+Edit `.env` — see `.env.example` for full documentation. Key settings:
+
+| Setting | Default | Description |
+|---------|---------|-------------|
+| `DEEPSEEK_API_KEY` | — | **Required.** AI provider |
+| `HELIUS_API_KEY` | — | Premium RPC (recommended) |
+| `BIRDEYE_API_KEY` | — | Token analytics |
+| `JUPITER_API_KEY` | — | Swap routing |
+| `AARNA_API_KEY` | — | Technical analysis (44 indicators) |
+| `POSITION_SIZE_PERCENT` | `30` | % of balance per trade |
+| `MAX_POSITIONS` | `3` | Concurrent positions |
+| `STOP_LOSS_PERCENT` | `20` | Stop loss (R:R 1:2 with 40% TP) |
+| `TAKE_PROFIT_PERCENT` | `40` | Take profit target |
+| `MIN_LIQUIDITY_USD` | `15000` | Minimum liquidity filter |
+| `SIMULATION_MODE` | `true` | Paper trading with real prices |
+
+### 3. Get API Keys
+
+| Service | Link | Free Tier |
+|---------|------|-----------|
+| **DeepSeek** | [platform.deepseek.com](https://platform.deepseek.com) | ~$2 credit |
+| **Helius** | [helius.dev](https://helius.dev) | Yes |
+| **Birdeye** | [birdeye.so/developers](https://birdeye.so/developers) | Yes |
+| **Jupiter** | [portal.jup.ag](https://portal.jup.ag) | 600 req/min |
+| **Smithery** | [smithery.ai](https://smithery.ai) | Yes |
+| **Telegram** | [t.me/BotFather](https://t.me/BotFather) | Free |
+
+### 4. Run
+
+```bash
+# Paper trading (simulation mode — recommended first)
+python main.py
+
+# Live trading (edit .env: SIMULATION_MODE=false, DRY_RUN=false)
+python main.py
+```
 
 ---
 
-<p align="center">
-  <b>NEXUS AI</b> — Autonomous Intelligence for Digital Markets
-</p>
+## 🧠 Multi-Agent AI System
+
+4 specialized DeepSeek agents work in sequence:
+
+### Agent #1: Token Analyzer
+```
+Input:  Contract address, on-chain data, TA signals
+Output: Security score 0-100, red flags list
+Focus:  "Is this token safe?"
+```
+
+### Agent #2: Sentiment Analyzer
+```
+Input:  Volume trend, holder growth, social mentions
+Output: Hype score 0-100, trending direction
+Focus:  "Is there momentum?"
+```
+
+### Agent #3: Risk Assessor
+```
+Input:  Holder distribution, LP status, dev wallet activity
+Output: Rug probability %, risk level (LOW/MED/HIGH)
+Focus:  "What can go wrong?"
+```
+
+### Agent #4: Master Decision
+```
+Input:  Results from Agent 1-3 + Aarna TA (44 indicators)
+Output: BUY/SELL/WAIT, entry price, SL, TP, confidence %
+Focus:  "Should we trade?"
+```
+
+**Decision Thresholds:**
+- ✅ Score ≥ 65 + Confidence ≥ 70% → Execute trade
+- ⚠️ Score 50-65 → Alert only (no auto-trade)
+- ❌ Score < 50 → Skip
+
+---
+
+## 📡 Aarna MCP Integration
+
+Technical analysis powered by [Aarna ATARS](https://smithery.ai/servers/atars-MCP/aarnaai) via Smithery Connect:
+
+- **44 indicators** per token (RSI, MACD, Bollinger Bands, EMA cross, ADX, Stochastic, etc.)
+- **Composite signal** — BULLISH / BEARISH / NEUTRAL with bullish/bearish breakdown counts
+- **Transport** — JSON-RPC over HTTP via Smithery Connect API
+- **Integration** — Feeds directly into Master Decision agent for TA-aware trade sizing
+
+---
+
+## 📊 Validation Checks
+
+Before every trade, NEXUS runs:
+
+| Check | Pass Criteria | Fail Action |
+|-------|---------------|-------------|
+| **Mint Authority** | Revoked | ❌ Block |
+| **Freeze Authority** | Revoked | ❌ Block |
+| **Liquidity** | > $15k | ❌ Block |
+| **LP Locked** | Yes or burned | ⚠️ Warning |
+| **Top Holder** | < 25% supply | ⚠️ Warning |
+| **Top 10 Holders** | < 55% supply | ⚠️ Warning |
+| **Contract Age** | > 30 min | ⚠️ Warning |
+| **Holders Count** | ≥ 50 | ❌ Block |
+
+---
+
+## 📈 Learning System
+
+```
+  Trade Executed
+       │
+       ▼
+  Wait for outcome (TP / SL / manual close)
+       │
+       ▼
+  ReactiveAI updates per-signal weights:
+  • Which data sources predicted correctly?
+  • Increase weight for winning signals
+  • Decrease weight for losing signals
+       │
+       ▼
+  Every 24h — LearningEngine (DeepSeek):
+  • AI post-mortem: "Why did trades win/lose?"
+  • Auto-adjust thresholds, SL/TP, sizing
+  • Insights saved to database
+       │
+       ▼
+  Next scan cycle uses updated weights
+```
+
+---
+
+## 🛡️ Infrastructure
+
+| Module | Purpose |
+|--------|---------|
+| **Rate Limiter** | Token bucket per API, prevents 429s |
+| **Circuit Breaker** | Halts calls to failing services, auto-recovery |
+| **Resilient Client** | Retry with exponential backoff, fallback chains |
+| **Health Monitor** | Tracks service health across all data providers |
+| **Security Scanner** | Token vulnerability detection |
+
+---
+
+## 🚀 Roadmap
+
+### Phase 1: Core Bot ✅
+- [x] Data aggregation (Jupiter, Birdeye, DexScreener, Helius, PumpFun)
+- [x] DeepSeek AI integration (4 specialized agents)
+- [x] Token validation (rug check, contract analysis)
+- [x] Telegram alerts
+
+### Phase 2: Multi-Agent AI ✅
+- [x] 4 specialized agents with consensus decision
+- [x] Confidence scoring + position sizing
+- [x] Aarna MCP integration (44 TA indicators)
+
+### Phase 3: Validation & Security ✅
+- [x] Multi-source rug detection
+- [x] Contract analyzer + security scanner
+- [x] Whale wallet tracking
+
+### Phase 4: Learning System ✅
+- [x] SQLite trade database
+- [x] ReactiveAI weight tuning
+- [x] AI post-mortem analysis (24h cycle)
+
+### Phase 5: Infrastructure ✅
+- [x] Rate limiter, circuit breaker, resilient client
+- [x] Paper trading simulator with real mainnet prices
+- [x] Backtesting engine
+
+### Phase 6: Production 🔨
+- [ ] Extended paper trading validation
+- [ ] Small capital live test
+- [ ] Full deployment
+- [ ] Subscription / token-gated access
+
+---
+
+## 💰 Business Model
+
+### Subscription Tiers
+
+| Tier | Price | Features |
+|------|-------|----------|
+| **Free** | 0€ | 3 alerts/day, no auto-trade |
+| **Pro** | 29€/mo | Unlimited alerts, auto-trade |
+| **Whale** | 99€/mo | Priority signals, VIP group, custom settings |
+
+### Token Gated Access
+
+Hold **$NEXUS** for access:
+
+| Tier | $NEXUS Required | Access |
+|------|-----------------|--------|
+| Free | 0 | Basic alerts (15min delay) |
+| Bronze | 10,000 | Real-time alerts |
+| Silver | 50,000 | + Auto-trade |
+| Gold | 200,000 | + Unlimited pairs |
+| Diamond | 1,000,000 | + API access + VIP |
+
+---
+
+## ⚠️ Disclaimer
+
+- Trading crypto is **HIGH RISK**
+- Past performance ≠ future results
+- AI can and will make mistakes
+- Never trade more than you can afford to lose
+- This is **NOT** financial advice — DYOR
+
+---
+
+## 📞 Contact
+
+- **GitHub:** [conditional-team](https://github.com/conditional-team)
+
+---
+
+**Built with 🧠 by Conditional Team**
