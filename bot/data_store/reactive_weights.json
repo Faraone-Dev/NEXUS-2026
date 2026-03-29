@@ -1,0 +1,20 @@
+{
+  "liquidity_weight": 1.0,
+  "holder_count_weight": 1.0,
+  "age_weight": 1.0,
+  "volume_weight": 1.0,
+  "token_analyzer_trust": 1.0,
+  "sentiment_trust": 1.0,
+  "risk_trust": 1.0,
+  "whale_signal_weight": 1.0,
+  "low_mcap_bonus": 0.0,
+  "high_volume_bonus": 0.0,
+  "base_stop_loss": 20.0,
+  "base_take_profit": 40.0,
+  "position_size_multiplier": 1.0,
+  "learning_rate": 0.15,
+  "total_trades": 0,
+  "wins": 0,
+  "losses": 0,
+  "total_pnl": 0.0
+}

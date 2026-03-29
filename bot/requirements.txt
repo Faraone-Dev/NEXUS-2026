@@ -1,36 +1,67 @@
-# NEXUS AI Trading Bot - Dependencies
+# ═══════════════════════════════════════════════════════════════════════════
+#                        NEXUS AI - SOLANA EDITION
+#                            Dependencies
+# ═══════════════════════════════════════════════════════════════════════════
 
-# Exchange connectivity
-ccxt==4.2.0
+# ─────────────────────────────────────────────────────────────────────────────
+#                              CORE
+# ─────────────────────────────────────────────────────────────────────────────
+python-dotenv==1.0.0      # Environment variables
+loguru==0.7.2             # Logging
+pydantic==2.5.0           # Data validation
 
-# AI
-openai==1.12.0
+# ─────────────────────────────────────────────────────────────────────────────
+#                              AI
+# ─────────────────────────────────────────────────────────────────────────────
+openai==1.12.0            # DeepSeek API (OpenAI compatible)
 
-# Data handling
-pandas==2.1.0
-numpy==1.26.0
+# ─────────────────────────────────────────────────────────────────────────────
+#                           SOLANA
+# ─────────────────────────────────────────────────────────────────────────────
+solana==0.32.0            # Solana SDK
+solders==0.21.0           # Solana types
+anchorpy==0.20.1          # Anchor framework
+base58==2.1.1             # Base58 encoding
 
-# HTTP requests
-requests==2.31.0
-aiohttp==3.9.0
+# ─────────────────────────────────────────────────────────────────────────────
+#                           HTTP / ASYNC
+# ─────────────────────────────────────────────────────────────────────────────
+httpx==0.27.0             # Async HTTP client
+aiohttp==3.9.0            # Async HTTP
+websockets==12.0          # WebSocket connections
 
-# WebSocket for real-time data
-websockets==12.0
+# ─────────────────────────────────────────────────────────────────────────────
+#                           TELEGRAM
+# ─────────────────────────────────────────────────────────────────────────────
+python-telegram-bot==21.0  # Telegram Bot API
 
-# Environment variables
-python-dotenv==1.0.0
+# ─────────────────────────────────────────────────────────────────────────────
+#                           DATA
+# ─────────────────────────────────────────────────────────────────────────────
+pandas==2.1.0             # Data analysis
+numpy==1.26.0             # Numerical computing
 
-# Telegram notifications
-python-telegram-bot==21.0
+# ─────────────────────────────────────────────────────────────────────────────
+#                           SCHEDULING
+# ─────────────────────────────────────────────────────────────────────────────
+apscheduler==3.10.4       # Job scheduling
 
-# Scheduling
-apscheduler==3.10.4
+# ─────────────────────────────────────────────────────────────────────────────
+#                           UTILITIES
+# ─────────────────────────────────────────────────────────────────────────────
+ratelimit==2.2.1          # Rate limiting
+tenacity==8.2.3           # Retry logic
+cachetools==5.3.2         # Caching
 
-# Logging
-loguru==0.7.2
+# ─────────────────────────────────────────────────────────────────────────────
+#                      INFRASTRUCTURE (New)
+# ─────────────────────────────────────────────────────────────────────────────
+asyncio-throttle==1.0.2   # Async rate limiting
+aiofiles==23.2.1          # Async file operations
 
-# Rate limiting
-ratelimit==2.2.1
-
-# Technical analysis (optional)
-ta==0.11.0
+# ─────────────────────────────────────────────────────────────────────────────
+#                      TESTING & BENCHMARKING
+# ─────────────────────────────────────────────────────────────────────────────
+pytest==8.0.0             # Testing framework
+pytest-asyncio==0.23.0    # Async test support
+pytest-cov==4.1.0         # Coverage
