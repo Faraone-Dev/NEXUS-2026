@@ -176,7 +176,7 @@ nexus-2026/
 ### 1. Clone & Install
 
 ```bash
-git clone https://github.com/conditional-team/nexus-2026.git
+git clone https://github.com/Faraone-Dev/nexus-2026.git
 cd nexus-2026/bot
 pip install -r requirements.txt
 ```
