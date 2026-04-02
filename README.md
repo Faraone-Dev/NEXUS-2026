@@ -165,7 +165,7 @@ nexus-2026/
 │   └── script.js
 │
 ├── .gitignore
-├── LICENSE                           # Proprietary — Conditional Team
+├── LICENSE                           # Proprietary — Faraone-Dev
 └── README.md
 ```
 
@@ -403,8 +403,8 @@ Hold **$NEXUS** for access:
 
 ## 📞 Contact
 
-- **GitHub:** [conditional-team](https://github.com/conditional-team)
+- **GitHub:** [Faraone-Dev](https://github.com/Faraone-Dev)
 
 ---
 
-**Built with 🧠 by Conditional Team**
+**Built with 🧠 by Faraone-Dev**
