@@ -103,6 +103,7 @@ nexus-2026/
 │
 ├── bot/                              # AI Trading Bot
 │   ├── main.py                       # Entry point — scan loop, trade pipeline
+│   ├── api_server.py                 # Dashboard REST API (aiohttp, port 8080)
 │   ├── config.py                     # Centralized config from .env
 │   ├── run_backtest.py               # Backtesting runner
 │   │
@@ -110,7 +111,8 @@ nexus-2026/
 │   │   ├── engine.py                 # DeepSeek client (OpenAI-compatible)
 │   │   ├── agents.py                 # 4 specialized agents + decision model
 │   │   ├── learning.py               # Post-mortem analysis, parameter tuning
-│   │   └── reactive.py               # Reactive weight system (per-signal)
+│   │   ├── reactive.py               # Reactive weight system (per-signal)
+│   │   └── rule_scorer.py            # Deterministic rule-based scorer (A/B baseline)
 │   │
 │   ├── data/                         # Data Layer
 │   │   ├── jupiter.py                # Jupiter V3 — prices, quotes, swaps
@@ -149,20 +151,37 @@ nexus-2026/
 │   ├── backtesting/                  # Backtesting Engine
 │   │   └── engine.py                 # Historical simulation framework
 │   │
+│   ├── tests/                        # Test Suite (73 tests)
+│   │   ├── test_ai_engine.py
+│   │   ├── test_circuit_breaker.py
+│   │   ├── test_config.py
+│   │   ├── test_database.py
+│   │   ├── test_integration.py
+│   │   ├── test_jupiter.py
+│   │   ├── test_position_manager.py
+│   │   ├── test_rate_limiter.py
+│   │   └── test_rug_checker.py
+│   │
 │   ├── data_store/                   # Runtime data (gitignored)
 │   ├── training/                     # Training data directory
 │   ├── .env.example                  # Environment template
 │   └── requirements.txt              # Python dependencies
 │
-├── contracts/                        # Smart Contracts (EVM)
-│   ├── NexusToken.sol                # $NEXUS ERC-20 (tax, anti-whale, tiers)
-│   ├── NexusStaking.sol              # Staking (10% APY, compound, penalties)
-│   └── scripts/deploy.js             # Multi-chain deployment
-│
-├── website/                          # Landing Page
+├── dashboard/                        # Real-Time Dashboard (Vite + React + Tailwind)
 │   ├── index.html
-│   ├── style.css
-│   └── script.js
+│   ├── vite.config.js
+│   ├── package.json
+│   └── src/
+│       ├── App.jsx                   # Main app — tab layout, polling, state
+│       ├── main.jsx
+│       ├── index.css
+│       └── components/
+│           ├── Header.jsx            # Mode badge, connection status
+│           ├── StatsBar.jsx          # Balance, P&L, win rate, trades
+│           ├── PositionsTable.jsx    # Open positions with SL/TP
+│           ├── ABLog.jsx             # AI vs Rule scorer comparison
+│           ├── WeightsPanel.jsx      # Reactive weight visualization
+│           └── ActivityFeed.jsx      # Live scan/skip/trade event stream
 │
 ├── .gitignore
 ├── LICENSE                           # Proprietary — Faraone-Dev
@@ -331,7 +350,62 @@ Before every trade, NEXUS runs:
 
 ---
 
-## 🚀 Roadmap
+## � Real-Time Dashboard
+
+Vite + React + Tailwind CSS dashboard with live bot telemetry.
+
+```bash
+cd dashboard
+npm install
+npm run dev          # → http://localhost:5173
+```
+
+The bot embeds an API server on `:8080` that the dashboard polls every 5 seconds.
+
+| Tab | What It Shows |
+|-----|---------------|
+| **Stats Bar** | Balance, P&L, win rate, open positions, tokens analyzed |
+| **Positions** | Open trades with entry/current price, P&L%, age, SL/TP |
+| **A/B Test** | AI vs rule-based scorer — agreement rate, per-decision log |
+| **Weights** | Reactive AI signal weights + learning stats |
+| **Activity** | Live event stream — scans, rug check skips, trades |
+
+**API Endpoints:**
+
+| Endpoint | Description |
+|----------|-------------|
+| `GET /api/stats` | Balance, P&L, trade counts, config |
+| `GET /api/positions` | Open positions with computed P&L |
+| `GET /api/ab-log` | AI vs rule scorer comparison log |
+| `GET /api/weights` | Current reactive signal weights |
+| `GET /api/activity` | Scan/skip/trade event stream |
+
+---
+
+## 🧪 Tests
+
+73 tests covering AI engine, infrastructure, execution, and integration:
+
+```bash
+cd bot
+python -m pytest tests/ -v --tb=short
+```
+
+| Suite | Coverage |
+|-------|----------|
+| `test_ai_engine` | DeepSeek client, multi-agent flow, fallback |
+| `test_circuit_breaker` | Open/close states, health monitoring |
+| `test_rate_limiter` | Token bucket, per-service limits |
+| `test_database` | SQLite WAL, trade/scan persistence |
+| `test_jupiter` | Swap routing, quote parsing |
+| `test_position_manager` | SL/TP triggers, multi-position state |
+| `test_rug_checker` | RugCheck scoring, threshold filtering |
+| `test_config` | Env loading, defaults, validation |
+| `test_integration` | End-to-end pipeline, component wiring |
+
+---
+
+## �🚀 Roadmap
 
 ### Phase 1: Core Bot ✅
 - [x] Data aggregation (Jupiter, Birdeye, DexScreener, Helius, PumpFun)
@@ -359,11 +433,17 @@ Before every trade, NEXUS runs:
 - [x] Paper trading simulator with real mainnet prices
 - [x] Backtesting engine
 
-### Phase 6: Production 🔨
+### Phase 6: Dashboard & Testing ✅
+- [x] Real-time React dashboard (Vite + Tailwind)
+- [x] REST API server embedded in bot (5 endpoints)
+- [x] A/B testing framework (AI vs rule-based scorer)
+- [x] Activity logging and telemetry pipeline
+- [x] Test suite — 73 tests, all green
+
+### Phase 7: Production 🔨
 - [ ] Extended paper trading validation
 - [ ] Small capital live test
 - [ ] Full deployment
-- [ ] Subscription / token-gated access
 
 ---
 

@@ -42,4 +42,7 @@ bot/data_store/nexus.db
 bot/data_store/nexus.db-*
 bot/data_store/positions.json
 bot/data_store/learning_insights.json
+bot/data_store/activity.json
+bot/data_store/ab_log.json
+bot/data_store/reactive_weights.json
 bot/training/trade_outcomes.json
