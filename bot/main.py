@@ -17,9 +17,11 @@
 import sys
 import signal
 import asyncio
+import json
 import time
 from contextlib import suppress
 from datetime import datetime
+from pathlib import Path
 from typing import Optional, Dict, Set
 from loguru import logger
 
@@ -195,7 +197,44 @@ class NexusBot:
         self.rate_limited_calls = 0
         
         logger.info("NEXUS Bot initialized with resilient infrastructure")
-    
+
+    # ─── A/B log persistence (dashboard) ─────────────────────
+    _AB_LOG_PATH = Path(__file__).parent / "data_store" / "ab_log.json"
+    _AB_MAX_ENTRIES = 500
+
+    def _append_ab_log(self, entry: dict):
+        """Append an A/B comparison entry to data_store/ab_log.json."""
+        try:
+            data = json.loads(self._AB_LOG_PATH.read_text()) if self._AB_LOG_PATH.exists() else []
+        except Exception:
+            data = []
+        data.append(entry)
+        if len(data) > self._AB_MAX_ENTRIES:
+            data = data[-self._AB_MAX_ENTRIES:]
+        self._AB_LOG_PATH.write_text(json.dumps(data, indent=2))
+
+    # ─── Activity log persistence (dashboard) ────────────────
+    _ACTIVITY_PATH = Path(__file__).parent / "data_store" / "activity.json"
+    _ACTIVITY_MAX = 500
+
+    def _log_activity(self, event_type: str, message: str, pnl=None):
+        """Append an activity event for the dashboard."""
+        try:
+            data = json.loads(self._ACTIVITY_PATH.read_text()) if self._ACTIVITY_PATH.exists() else []
+        except Exception:
+            data = []
+        entry = {
+            "type": event_type,
+            "message": message,
+            "timestamp": datetime.now().isoformat(),
+        }
+        if pnl is not None:
+            entry["pnl"] = pnl
+        data.append(entry)
+        if len(data) > self._ACTIVITY_MAX:
+            data = data[-self._ACTIVITY_MAX:]
+        self._ACTIVITY_PATH.write_text(json.dumps(data, indent=2))
+
     def _setup_infrastructure(self):
         """
         Initialize rate limiting and circuit breaker for all APIs
@@ -684,6 +723,41 @@ class NexusBot:
         except Exception as e:
             logger.debug(f"Aarna TA fetch failed: {e}")
 
+        # ═══════════════════════════════════════════════════════════════
+        # SENTIMENT SIGNALS (Whale Tracker + computed metrics)
+        # ═══════════════════════════════════════════════════════════════
+        # Buy/Sell ratio as market sentiment proxy
+        b24 = data.get("buys_24h", 0)
+        s24 = data.get("sells_24h", 0)
+        data["buy_sell_ratio"] = round(b24 / max(s24, 1), 2)
+
+        # Volume spike detection: 1h volume > 10% of 24h → unusual activity
+        v1h = data.get("volume_1h", 0)
+        v24h = data.get("volume_24h", 0)
+        data["volume_spike"] = v1h > (v24h * 0.10) if v24h > 0 else False
+
+        # Whale flow (Helius API - best-effort, non-blocking)
+        try:
+            whale_flow = await asyncio.wait_for(
+                self.whale_tracker.analyze_token_flow(mint),
+                timeout=4.0
+            )
+            data["whale_buys"] = whale_flow.get("whale_buys", 0)
+            data["whale_sells"] = whale_flow.get("whale_sells", 0)
+            data["whale_net_flow"] = whale_flow.get("net_flow", 0)
+            data["whale_signal"] = whale_flow.get("signal", "NEUTRAL")
+            data["whale_notable_wallets"] = whale_flow.get("notable_wallets", [])
+            if whale_flow.get("whale_buys", 0) > 0 or whale_flow.get("whale_sells", 0) > 0:
+                logger.info(f"   🐋 Whale flow: {whale_flow['signal']} "
+                           f"({whale_flow['whale_buys']}B/{whale_flow['whale_sells']}S)")
+        except Exception as e:
+            logger.debug(f"Whale tracker failed (non-critical): {e}")
+            data["whale_buys"] = 0
+            data["whale_sells"] = 0
+            data["whale_net_flow"] = 0
+            data["whale_signal"] = "UNAVAILABLE"
+            data["whale_notable_wallets"] = []
+
         cache_entry_final = self.pair_cache.get(mint, {})
         cache_entry_final["price_snapshot"] = data["price"]
         cache_entry_final.setdefault("timestamp", now)
@@ -728,10 +802,13 @@ class NexusBot:
         scan_liq = float(token.get("liquidity", 0) or 0)
         rug_result = await self.rug_checker.check(mint, scan_liquidity=scan_liq)
         if not rug_result or not rug_result.is_safe:
+            score = getattr(rug_result, 'safety_score', 0) if rug_result else 0
             logger.warning(f"   ❌ Failed rug check")
+            self._log_activity("skip", f"{symbol} — rug check FAILED ({score}/100)")
             return False
         
         logger.info(f"   ✅ Rug check: {rug_result.safety_score}/100")
+        self._log_activity("scan", f"{symbol} — rug check passed ({rug_result.safety_score}/100), analyzing...")
         
         # 3. Get complete data for AI (PARALLEL - fast)
         full_data = await self.analyze_token(token, rug_result=rug_result)
@@ -743,6 +820,29 @@ class NexusBot:
         if not decision:
             logger.error(f"   AI analysis failed")
             return False
+        
+        # ──── A/B LOG: rule-based scorer (shadow, never overrides) ────
+        from ai.rule_scorer import rule_based_score, RuleDecision
+        rule = rule_based_score(full_data)
+        llm_dec = decision.decision.value
+        agree = (llm_dec == rule.decision)
+        tag = "AGREE" if agree else "DISAGREE"
+        logger.info(f"   ⚖️ A/B [{tag}] LLM={llm_dec}({decision.confidence}%) "
+                     f"RULE={rule.decision}({rule.score}/100)")
+        if not agree:
+            logger.info(f"      Rule reasons: +[{', '.join(rule.reasons_buy)}] "
+                         f"-[{', '.join(rule.reasons_skip)}]")
+        # Persist to ab_log.json for dashboard
+        self._append_ab_log({
+            "symbol": token.get("symbol", token.get("baseToken", {}).get("symbol", "?")),
+            "llm_decision": llm_dec,
+            "rule_decision": rule.decision,
+            "agree": agree,
+            "rule_score": rule.score,
+            "llm_confidence": decision.confidence,
+            "reasons": ", ".join(rule.reasons_buy + rule.reasons_skip),
+            "timestamp": datetime.now().isoformat(),
+        })
         
         # 5. Learning override check
         should_override, override_reason = self.learning.should_override_ai_decision(
@@ -757,11 +857,13 @@ class NexusBot:
         # 5. Check if should trade
         if decision.decision != Decision.BUY:
             logger.info(f"   AI decision: {decision.decision.value} (skip)")
+            self._log_activity("skip", f"{symbol} — AI says {decision.decision.value} ({decision.confidence}%)")
             await self._record_scan(full_data, decision.decision.value, decision.confidence, decision)
             return False
         
         if decision.confidence < config.MIN_CONFIDENCE:
             logger.info(f"   Confidence too low: {decision.confidence}% < {config.MIN_CONFIDENCE}%")
+            self._log_activity("skip", f"{symbol} — confidence too low ({decision.confidence}% < {config.MIN_CONFIDENCE}%)")
             await self._record_scan(full_data, "SKIP (low confidence)", decision.confidence, decision)
             return False
         
@@ -818,6 +920,7 @@ class NexusBot:
                     )
 
                     self.trades_executed += 1
+                    self._log_activity("buy", f"Bought {symbol} for {sol_amount:.4f} SOL @ ${position.entry_price:.10f}")
                     return True
                 return False
 
@@ -1188,6 +1291,13 @@ class NexusBot:
         # ═══════════════════════════════════════════════════════════════════
         await health_monitor.start_monitoring(check_interval=30.0)
         logger.info("💓 Health monitoring started")
+
+        # ═══════════════════════════════════════════════════════════════════
+        # START DASHBOARD API
+        # ═══════════════════════════════════════════════════════════════════
+        from api_server import start_api_server
+        self._api_runner = await start_api_server()
+        logger.info("📊 Dashboard API started on :8080")
         
         # Send startup alert
         await self.alerts.startup()
