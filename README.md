@@ -9,7 +9,7 @@
 ╚═╝  ╚═══╝╚══════╝╚═╝   ╚═╝ ╚═════╝ ╚══════╝    ╚═╝  ╚═╝╚═╝
 ```
 
-> **AI-Powered Trading Bot for Solana Ecosystem**
+> **AI-Powered Solana Trading Intelligence**
 > 
 > Multi-agent AI system that scans, validates, and trades tokens on Solana DEXs — with real-time technical analysis, on-chain risk scoring, and self-improving learning loops.
 
@@ -99,7 +99,7 @@ NEXUS is a fully autonomous Solana trading system. It's not a signal channel —
 ## 📁 Project Structure
 
 ```
-nexus-2026/
+nexus-ai/
 │
 ├── bot/                              # AI Trading Bot
 │   ├── main.py                       # Entry point — scan loop, trade pipeline
@@ -195,8 +195,8 @@ nexus-2026/
 ### 1. Clone & Install
 
 ```bash
-git clone https://github.com/Faraone-Dev/nexus-2026.git
-cd nexus-2026/bot
+git clone https://github.com/Faraone-Dev/nexus-ai.git
+cd nexus-ai/bot
 pip install -r requirements.txt
 ```
 
@@ -226,7 +226,7 @@ Edit `.env` — see `.env.example` for full documentation. Key settings:
 
 | Service | Link | Free Tier |
 |---------|------|-----------|
-| **DeepSeek** | [platform.deepseek.com](https://platform.deepseek.com) | ~$2 credit |
+| **DeepSeek** | [platform.deepseek.com](https://platform.deepseek.com) | Yes |
 | **Helius** | [helius.dev](https://helius.dev) | Yes |
 | **Birdeye** | [birdeye.so/developers](https://birdeye.so/developers) | Yes |
 | **Jupiter** | [portal.jup.ag](https://portal.jup.ag) | 600 req/min |
