@@ -43,8 +43,9 @@ class HeliusClient:
     
     def __init__(self, api_key: str = None):
         self.api_key = api_key or config.HELIUS_API_KEY
-        self.rpc_url = f"https://mainnet.helius-rpc.com/?api-key={self.api_key}"
-        self.api_url = f"https://api.helius.xyz/v0"
+        self.rpc_url = "https://mainnet.helius-rpc.com"
+        self.api_url = "https://api.helius.xyz/v0"
+        self._rpc_params = {"api-key": self.api_key}
         self.client = httpx.AsyncClient(timeout=30)
         logger.info("Helius client initialized")
     
@@ -59,8 +60,6 @@ class HeliusClient:
             TokenMetadata or None
         """
         try:
-            url = self.rpc_url
-            
             payload = {
                 "jsonrpc": "2.0",
                 "id": "nexus",
@@ -68,7 +67,7 @@ class HeliusClient:
                 "params": {"id": mint}
             }
             
-            response = await self.client.post(url, json=payload)
+            response = await self.client.post(self.rpc_url, params=self._rpc_params, json=payload)
             response.raise_for_status()
             
             data = response.json()
@@ -113,7 +112,7 @@ class HeliusClient:
                 "params": [wallet]
             }
             
-            response = await self.client.post(self.rpc_url, json=sol_payload)
+            response = await self.client.post(self.rpc_url, params=self._rpc_params, json=sol_payload)
             response.raise_for_status()
             sol_data = response.json()
             sol_balance = sol_data.get("result", {}).get("value", 0) / 1e9
@@ -130,7 +129,7 @@ class HeliusClient:
                 ]
             }
             
-            response = await self.client.post(self.rpc_url, json=token_payload)
+            response = await self.client.post(self.rpc_url, params=self._rpc_params, json=token_payload)
             response.raise_for_status()
             token_data = response.json()
             
@@ -229,7 +228,7 @@ class HeliusClient:
                 }
             }
             
-            response = await self.client.post(self.rpc_url, json=payload)
+            response = await self.client.post(self.rpc_url, params=self._rpc_params, json=payload)
             response.raise_for_status()
             
             data = response.json()
@@ -281,7 +280,7 @@ class HeliusClient:
                 "params": {"id": mint}
             }
             
-            response = await self.client.post(self.rpc_url, json=payload)
+            response = await self.client.post(self.rpc_url, params=self._rpc_params, json=payload)
             response.raise_for_status()
             
             data = response.json()

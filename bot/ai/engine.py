@@ -372,6 +372,22 @@ class AIEngine:
    Indicators: {all_data.get('ta_indicators_summary', 'N/A')}
 """
 
+        # ──────────────────────────────────────────────────────────────────
+        # INJECT SENTIMENT SIGNALS (on-chain derived)
+        # ──────────────────────────────────────────────────────────────────
+        whale_signal = all_data.get("whale_signal", "UNAVAILABLE")
+        prompt += f"""
+
+🐋 SENTIMENT SIGNALS (on-chain derived):
+   Buy/Sell Ratio 24h: {all_data.get('buy_sell_ratio', 0):.2f} ({'buying pressure' if all_data.get('buy_sell_ratio', 0) > 1.2 else 'selling pressure' if all_data.get('buy_sell_ratio', 0) < 0.8 else 'neutral'})
+   Volume Spike (1h): {'🔥 YES' if all_data.get('volume_spike', False) else 'No'}
+   Whale Activity: {whale_signal}
+   Whale Buys: {all_data.get('whale_buys', 0)} | Whale Sells: {all_data.get('whale_sells', 0)}
+   Whale Net Flow: ${all_data.get('whale_net_flow', 0):,.0f}
+   Notable Wallets: {', '.join(all_data.get('whale_notable_wallets', [])) or 'None detected'}
+   ⚠️ Note: No social media data (Twitter/Telegram) available — sentiment is derived from on-chain activity only.
+"""
+
         prompt += f"""
 ═══════════════════════════════════════════════════════════════
                     YOUR ANALYSIS
@@ -384,6 +400,8 @@ Consider:
 4. Is the risk/reward favorable?
 5. Is this a potential rug pull?
 6. If TA signals available: does the composite signal confirm momentum? Is trend bullish? Is RSI overbought (>70 caution) or healthy?
+7. Whale activity: are smart money wallets buying or selling? Volume spike = unusual interest.
+8. Your sentiment_score should reflect ON-CHAIN signals (buy/sell ratio, whale flow, volume spike) — NOT social media.
 
 Return ONLY valid JSON:
 {{"decision":"BUY or SKIP","confidence":0-100,"token_score":0-100,"sentiment_score":0-100,"risk_score":0-100,"reasoning":"1-2 sentences explaining your decision"}}"""
@@ -409,6 +427,8 @@ BUY SIGNALS (any 2+ = BUY):
 ✅ Token age 1-48 hours (early = good for gains)
 ✅ TA composite signal = BULLISH with confidence > 60%
 ✅ TA trend regime = uptrend + momentum accelerating
+✅ Whale signal = BUY or STRONG_BUY (smart money accumulating)
+✅ Volume spike in last 1h (unusual buying activity)
 
 HARD SKIP (only these = SKIP):
 ❌ Mint authority ACTIVE (can print = definite rug)
@@ -416,6 +436,7 @@ HARD SKIP (only these = SKIP):
 ❌ Volume < $10k (dead/no interest)
 ❌ Top holder > 50% (extreme whale)
 ❌ TA signal = BEARISH with high confidence + downtrend regime
+❌ Whale signal = STRONG_SELL (smart money dumping)
 
 IMPORTANT: LP unlocked is NORMAL for Pump.fun tokens. Don't skip just for this!
 In SIMULATION MODE, be willing to take calculated risks to test the system.

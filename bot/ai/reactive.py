@@ -46,8 +46,10 @@ class RealtimeWeights:
     base_take_profit: float = 50.0
     position_size_multiplier: float = 1.0
     
-    # Learning rate (how fast to adjust)
-    learning_rate: float = 0.15  # 15% adjustment per trade
+    # EMA learning rate (decays as trades accumulate)
+    learning_rate_start: float = 0.30   # Aggressive early: learn fast from first trades
+    learning_rate_floor: float = 0.02   # Stable late: small adjustments after many trades
+    learning_rate_halflife: int = 20     # Trades until LR halves toward floor
     
     # Stats
     total_trades: int = 0
@@ -130,7 +132,9 @@ class ReactiveAI:
                 "base_stop_loss": self.weights.base_stop_loss,
                 "base_take_profit": self.weights.base_take_profit,
                 "position_size_multiplier": self.weights.position_size_multiplier,
-                "learning_rate": self.weights.learning_rate,
+                "learning_rate_start": self.weights.learning_rate_start,
+                "learning_rate_floor": self.weights.learning_rate_floor,
+                "learning_rate_halflife": self.weights.learning_rate_halflife,
                 "total_trades": self.weights.total_trades,
                 "wins": self.weights.wins,
                 "losses": self.weights.losses,
@@ -172,7 +176,7 @@ class ReactiveAI:
         Adjusts all weights based on what worked/failed.
         """
         is_win = outcome.pnl_percent > 0
-        lr = self.weights.learning_rate
+        lr = self._current_lr()
         
         # Scale adjustment by how big the win/loss was
         magnitude = min(abs(outcome.pnl_percent) / 50, 2.0)  # Cap at 2x
@@ -289,6 +293,13 @@ class ReactiveAI:
         
         self._log_status()
     
+    def _current_lr(self) -> float:
+        """EMA-decayed learning rate: aggressive early, stable late."""
+        w = self.weights
+        import math
+        decay = math.exp(-0.693 * w.total_trades / max(w.learning_rate_halflife, 1))
+        return w.learning_rate_floor + (w.learning_rate_start - w.learning_rate_floor) * decay
+
     def _clamp_weights(self):
         """Keep weights in reasonable bounds"""
         w = self.weights
@@ -335,7 +346,7 @@ class ReactiveAI:
         """Log current AI status"""
         w = self.weights
         logger.info(f"   Stats: {w.wins}W/{w.losses}L ({self._win_rate():.0f}%), "
-                   f"PnL: {w.total_pnl:+.1f}%")
+                   f"PnL: {w.total_pnl:+.1f}%, LR: {self._current_lr():.3f}")
         logger.info(f"   Trust: Token={w.token_analyzer_trust:.2f}, "
                    f"Sentiment={w.sentiment_trust:.2f}, Risk={w.risk_trust:.2f}")
     

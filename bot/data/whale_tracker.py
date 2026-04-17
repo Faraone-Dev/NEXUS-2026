@@ -81,8 +81,9 @@ class WhaleTracker:
     
     def __init__(self, api_key: str = None):
         self.api_key = api_key or config.HELIUS_API_KEY
-        self.rpc_url = f"https://mainnet.helius-rpc.com/?api-key={self.api_key}"
+        self.rpc_url = "https://mainnet.helius-rpc.com"
         self.api_url = "https://api.helius.xyz/v0"
+        self._rpc_params = {"api-key": self.api_key}
         self.client = httpx.AsyncClient(timeout=30)
         self.price_client = JupiterClient()
         
